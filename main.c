@@ -5,18 +5,16 @@
 #include <math.h>
 
 #define MAXCHAR 100
-#define NUMBEROFTESTS 4
-#define NUMBEROFPROJS 4
-
-FILE *Students;
+#define MAXTESTS 2
+#define MAXPROJS 4
 
 struct student_type{	//Um nó que guarda os dados de um aluno
 	char Name[MAXCHAR];	//Nome do aluno
 	char RegNum[MAXCHAR];	//Número de matrícula do aluno
-	float TestGrade[NUMBEROFTESTS];	//Nota das provas
-	float ProjGrade[NUMBEROFPROJS];	//Nota dos trabalhos
-	int PositInGroup[NUMBEROFPROJS];	//Posição do aluno em um grupo
-	int NofMembers[NUMBEROFPROJS];	//Numero de membros no grupo
+	float TestGrade[MAXTESTS];	//Nota das provas
+	float ProjGrade[MAXPROJS];	//Nota dos trabalhos
+	int PositInGroup[MAXPROJS];	//Posição do aluno em um grupo
+	int NofMembers[MAXPROJS];	//Numero de membros no grupo
 	struct student_type *Next;	//Ponteiro para o próximo aluno
 };
 typedef struct student_type stdnt;
@@ -25,13 +23,19 @@ stdnt *InitStudent(stdnt *Student){	//Função que inicializa um nó
 
 	int i = 0;
 
+	Student = (stdnt *)malloc(sizeof(stdnt));
+	if(Student == NULL){
+		printf("Memory allocation error.\n");
+		return Student;
+	}
+
 	while(i < MAXCHAR){
 		Student->Name[i] = 'x';
 		Student->RegNum[i] = 'x';
-		if(i < NUMBEROFTESTS){
+		if(i < MAXTESTS){
 			Student->TestGrade[i] = -1.0;
 		}
-		if(i < NUMBEROFPROJS){
+		if(i < MAXPROJS){
 			Student->ProjGrade[i] = -1.0;
 			Student->PositInGroup[i] = -1;
 			Student->NofMembers[i] = -1;
@@ -66,11 +70,7 @@ stdnt *Insert(stdnt *Head, stdnt *NewStudent){	//Função que insere um novo alu
 
 stdnt *IncludeStudent(stdnt *Head){	//Função que recolhe o nome e nº de matrícula e insere um novo aluno
 
-	stdnt *NewStudent = malloc(sizeof(stdnt));
-	if(NewStudent == NULL){
-		printf("Memory allocation error.\n");
-		return Head;
-	}
+	stdnt *NewStudent = NULL;
 	NewStudent = InitStudent(NewStudent);
 
 	printf("Type in his/her full name: ");
@@ -104,7 +104,7 @@ stdnt *PrintStudent(stdnt *Head, char RegNum[]){	//Função que mostra os dados 
 		printf("Reg. #: \n");
 		fputs(Head->RegNum, stdout);
 		printf("\n");
-		while(i < NUMBEROFTESTS){
+		while(i < MAXTESTS){
 			if(Head->TestGrade[i] != -1.0){
 				printf("Test %d:\n", i + 1);
 				printf("Test grade: %.2f\n", Head->TestGrade[i]);
@@ -113,7 +113,7 @@ stdnt *PrintStudent(stdnt *Head, char RegNum[]){	//Função que mostra os dados 
 		}
 		i = 0;
 		printf("\n");
-		while(i < NUMBEROFPROJS){
+		while(i < MAXPROJS){
 			if(Head->ProjGrade[i] != -1.0){
 				printf("Project %d:\n", i + 1);
 				printf("Project grade: %.2f\n", Head->ProjGrade[i]);
@@ -258,6 +258,45 @@ stdnt *SetStdtProjGrade(stdnt *Head){	//Função que recolhe o nome de um aluno 
 	return Head;
 }
 
+stdnt *SaveInFile(stdnt *Head){
+
+	FILE *Students = fopen("students.txt", "wt");
+	stdnt *Aux = Head;
+	int i;
+
+	while(Aux != NULL){
+		printf("hahah\n");
+		fprintf(Students, "%s", Aux->Name);
+		fprintf(Students, "%s", Aux->RegNum);
+		i = 0;
+		while(i < MAXTESTS){
+			fprintf(Students, "%f ", Aux->TestGrade[i]);
+			++i;
+		}
+		fprintf(Students, "\n");
+		i = 0;
+		while(i < MAXPROJS){
+			fprintf(Students, "%f ", Aux->ProjGrade[i]);
+			fprintf(Students, "%d ", Aux->PositInGroup[i]);
+			fprintf(Students, "%d\n", Aux->NofMembers[i]);
+			++i;
+		}
+		Aux = Aux->Next;
+	}
+	fclose(Students);
+	return Head;
+}
+
+stdnt *Destroy(stdnt *Head){ //Função que apaga toda a lista
+	if(Head == NULL){
+		return Head;
+	}
+
+	Head->Next = Destroy(Head->Next);
+	free(Head);
+	return NULL;
+}
+
 stdnt *Menu(stdnt *Head){
 
 	int Exit = 1;
@@ -278,10 +317,10 @@ stdnt *Menu(stdnt *Head){
 		printf("7. Save the data in a file.\n\n");
 		printf("Type in the option: ");
 
-		while(Option < 1 || Option > 6){
+		while(Option < 1 || Option > 7){
 			scanf("%d", &Option);
 			__fpurge(stdin);
-			if(Option < 1 || Option > 6){
+			if(Option < 1 || Option > 7){
 				printf("Invalid option, type in again: ");
 			}
 		}
@@ -337,11 +376,7 @@ stdnt *Menu(stdnt *Head){
 				Head = PrintAll(Head);
 				break;
 			case 7:
-
-
-				//SAVE IN A FILE
-
-
+				Head = SaveInFile(Head);
 				break;
 		}
 
@@ -351,12 +386,49 @@ stdnt *Menu(stdnt *Head){
 		__fpurge(stdin);
 	}
 
+	Head = SaveInFile(Head);
+	Head = Destroy(Head);
+
+	return Head;
+}
+
+stdnt *GetFromFile(stdnt *Head){
+
+	FILE *Students = fopen("students.txt", "rt");
+	if(Students == NULL){
+		Students = fopen("students.txt", "wt");
+	}
+	stdnt *Aux = NULL;
+	Aux = InitStudent(Aux);
+	int i;
+
+	while(fgets(Aux->Name, MAXCHAR, Students)){
+		fgets(Aux->RegNum, MAXCHAR, Students);
+		i = 0;
+		while(i < MAXTESTS){
+			fscanf(Students, "%f ", &Aux->TestGrade[i]);
+			++i;
+		}
+		i = 0;
+		while(i < MAXPROJS){
+			fscanf(Students, "%f ", &Aux->ProjGrade[i]);
+			fscanf(Students, "%d ", &Aux->PositInGroup[i]);
+			fscanf(Students, "%d ", &Aux->NofMembers[i]);
+			++i;
+		}
+		Head = Insert(Head, Aux);
+		Aux = InitStudent(Aux);
+	}
+	fclose(Students);
+	free(Aux);
 	return Head;
 }
 
 int main(){
 
 	stdnt *Head = NULL;
+
+	Head = GetFromFile(Head);
 	Head = Menu(Head);
 
 	return 0;
