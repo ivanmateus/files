@@ -352,6 +352,7 @@ stdnt *Menu(stdnt *Head){	//Função que exibe as opções do menu e as executam
 			case 1:
 				while(Exit){
 					Head = IncludeStudent(Head);
+					printf("Done!\n");
 					printf("\nIf you'd like to register another student, enter 1; else, 0: ");
 					scanf("%d", &Exit);
 					printf("\n");
@@ -361,6 +362,7 @@ stdnt *Menu(stdnt *Head){	//Função que exibe as opções do menu e as executam
 			case 2:
 				while(Exit){
 					Head = SetStdtTestGrade(Head);
+					printf("Done!\n");
 					printf("\nIf you'd like to add another test, enter 1; else, 0: ");
 					scanf("%d", &Exit);
 					printf("\n");
@@ -373,6 +375,7 @@ stdnt *Menu(stdnt *Head){	//Função que exibe as opções do menu e as executam
 				printf("\n");
 				clean_stdin();
 				Head = ShowTest(Head, Aux - 1);
+				printf("Done!\n");
 				break;
 			case 4:
 				printf("Type in the test you want to erase: ");
@@ -380,10 +383,12 @@ stdnt *Menu(stdnt *Head){	//Função que exibe as opções do menu e as executam
 				printf("\n");
 				clean_stdin();
 				Head = EraseTest(Head, Aux - 1);
+				printf("Done!\n");
 				break;
 			case 5:
 				while(Exit){
 					Head = SetStdtProjGrade(Head);
+					printf("Done!\n");
 					printf("\nIf you'd like to add another test, enter 1; else, 0: ");
 					scanf("%d", &Exit);
 					printf("\n");
@@ -396,6 +401,7 @@ stdnt *Menu(stdnt *Head){	//Função que exibe as opções do menu e as executam
 				printf("\n");
 				clean_stdin();
 				Head = ShowProj(Head, Aux - 1);
+				printf("Done!\n");
 				break;
 			case 7:
 				printf("Type in the project you want to erase: ");
@@ -403,10 +409,12 @@ stdnt *Menu(stdnt *Head){	//Função que exibe as opções do menu e as executam
 				printf("\n");
 				clean_stdin();
 				Head = EraseProj(Head, Aux - 1);
+				printf("Done!\n");
 				break;
 			case 8:
 				while(Exit){
 					Head = EraseStudentInfo(Head);
+					printf("Done!\n");
 					printf("\nIf you'd like to remove another register, enter 1; else, 0: ");
 					scanf("%d", &Exit);
 					printf("\n");
@@ -416,6 +424,7 @@ stdnt *Menu(stdnt *Head){	//Função que exibe as opções do menu e as executam
 			case 9:
 				while(Exit){
 					Head = ShowStudentInfo(Head);
+					printf("Done!\n");
 					printf("\nIf you'd like to consult another student, enter 1; else, 0: ");
 					scanf("%d", &Exit);
 					printf("\n");
@@ -424,9 +433,11 @@ stdnt *Menu(stdnt *Head){	//Função que exibe as opções do menu e as executam
 				break;
 			case 10:
 				Head = PrintAll(Head);
+				printf("Done!\n");
 				break;
 			case 11:
 				Head = SaveInFile(Head);
+				printf("Done!\n");
 				break;
 			case 0:
 				Head = SaveInFile(Head);
