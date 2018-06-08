@@ -35,6 +35,10 @@ stdnt *PutTestGrade(stdnt *Head, char RegNum[], int Test, float Grade);	//Funç�
 stdnt *SetStdtTestGrade(stdnt *Head);	//Função que recolhe o nome de um aluno e insere a nota de uma prova
 stdnt *PutProjGrade(stdnt *Head, char RegNum[], int Proj, float Grade, int Position, int NumberofMembers);	//Função que adiciona a nota de um trabalho
 stdnt *SetStdtProjGrade(stdnt *Head);	//Função que recolhe o nome de um aluno e insere a nota de um trabalho
+stdnt *ShowTest(stdnt *Head, int Test);	//Função que mostra os dados de uma prova em específico
+stdnt *ShowProj(stdnt *Head, int Proj);	//Função que mostra os dados de um trabalho em específico
+stdnt *EraseTest(stdnt *Head, int Test);	//Função que recolhe o nome de um aluno e remove seus dados
+stdnt *EraseProj(stdnt *Head, int Proj);	//Função que recolhe o nome de um aluno e remove seus dados
 stdnt *Menu(stdnt *Head); 	//Função que exibe as opções do menu e as executam
 
 #endif
