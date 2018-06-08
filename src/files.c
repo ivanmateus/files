@@ -54,7 +54,6 @@ stdnt *GetFromFile(stdnt *Head){	//Função que pega os dados do arquivo texto
 
 	FILE *Students = fopen("students.txt", "rt");
 	if(Students == NULL){
-		printf("riariaria\n");
 		Students = fopen("students.txt", "wt");
 	}
 	stdnt *Aux = NULL;
