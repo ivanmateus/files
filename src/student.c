@@ -324,7 +324,6 @@ stdnt *Menu(stdnt *Head){	//Função que exibe as opções do menu e as executam
 
 	while(1){
 		
-		clrscr();
 		Exit = 1;
 		Option = 0;
 
